@@ -1,11 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from datetime import datetime
 import sys
 
-def visualize_traffic(csv_file):
-    """Create visualizations from packet capture data"""
+def visualize_traffic(csv_file="result.csv"):
     try:
         # Load the CSV data
         df = pd.read_csv(csv_file)
@@ -16,6 +14,7 @@ def visualize_traffic(csv_file):
         # Calculate time since start for each packet
         start_time = df['timestamp'].min()
         df['time_seconds'] = (df['timestamp'] - start_time).dt.total_seconds()
+        df['time_bucket'] = df['time_seconds'].apply(lambda x: int(x))
         
         # Create a figure with multiple subplots
         fig, axs = plt.subplots(2, 2, figsize=(12, 10))
@@ -34,10 +33,7 @@ def visualize_traffic(csv_file):
         axs[0, 1].tick_params(axis='x', rotation=45)
         
         # 3. Traffic over time (packet count)
-        # Group by 1-second intervals
-        df['time_bucket'] = df['time_seconds'].apply(lambda x: int(x))
         packets_per_second = df.groupby('time_bucket').size()
-        
         axs[1, 0].plot(packets_per_second.index, packets_per_second.values, 'b-')
         axs[1, 0].set_title('Packets per Second')
         axs[1, 0].set_xlabel('Time (seconds)')
@@ -53,7 +49,7 @@ def visualize_traffic(csv_file):
         plt.tight_layout()
         
         # Save the figure
-        output_file = csv_file.replace('.csv', '_analysis.png')
+        output_file = "result_analysis.png"
         plt.savefig(output_file)
         print(f"Visualization saved to {output_file}")
         
@@ -66,7 +62,6 @@ def visualize_traffic(csv_file):
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         csv_file = sys.argv[1]
+        visualize_traffic(csv_file)
     else:
-        csv_file = input("Enter the CSV file to visualize: ")
-    
-    visualize_traffic(csv_file)
+        visualize_traffic()

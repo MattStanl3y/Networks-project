@@ -12,8 +12,7 @@
 
 ### commands
 
-'python3 capture.py'
-'python3 process.py'
+'python3 main.py'
 
 current issues(things i want to fix):
 

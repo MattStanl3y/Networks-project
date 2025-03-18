@@ -1,19 +1,8 @@
 import pyshark
 import pandas as pd
-from datetime import datetime
 import os
 
-def analyze_capture(capture_file, output_csv=None):
-    """
-    Analyze a packet capture file and extract key information.
-    
-    Args:
-        capture_file (str): Path to the capture file
-        output_csv (str, optional): Path to save CSV results
-    
-    Returns:
-        pandas.DataFrame: DataFrame containing packet information
-    """
+def analyze_capture(capture_file="result.pcapng", output_csv="result.csv"):
     if not os.path.exists(capture_file):
         print(f"Error: Capture file {capture_file} not found")
         return None
@@ -30,15 +19,10 @@ def analyze_capture(capture_file, output_csv=None):
     packet_lengths = []
     
     try:
-        # Open the capture file
-        cap = pyshark.FileCapture(capture_file)
-        
         # Process each packet
+        cap = pyshark.FileCapture(capture_file)
         for packet in cap:
-            # Get timestamp
             timestamps.append(packet.sniff_time)
-            
-            # Get packet length
             packet_lengths.append(int(packet.length))
             
             # Get IP info if available
@@ -59,7 +43,6 @@ def analyze_capture(capture_file, output_csv=None):
                 src_ports.append(packet.udp.srcport)
                 dst_ports.append(packet.udp.dstport)
             else:
-                # Use highest layer protocol name
                 protocols.append(packet.highest_layer)
                 src_ports.append(None)
                 dst_ports.append(None)
@@ -75,7 +58,7 @@ def analyze_capture(capture_file, output_csv=None):
             'length': packet_lengths
         })
         
-        # Calculate some basic statistics
+        # Calculate basic statistics
         total_packets = len(df)
         total_bytes = df['length'].sum()
         duration = (df['timestamp'].max() - df['timestamp'].min()).total_seconds()
@@ -92,10 +75,9 @@ def analyze_capture(capture_file, output_csv=None):
         for protocol, count in protocol_counts.items():
             print(f"  {protocol}: {count} packets ({count/total_packets*100:.1f}%)")
         
-        # Save to CSV if requested
-        if output_csv:
-            df.to_csv(output_csv, index=False)
-            print(f"\nData saved to {output_csv}")
+        # Save to CSV
+        df.to_csv(output_csv, index=False)
+        print(f"\nData saved to {output_csv}")
         
         return df
     
@@ -104,9 +86,4 @@ def analyze_capture(capture_file, output_csv=None):
         return None
 
 if __name__ == "__main__":
-    # Get input from user
-    capture_file = input("Enter the capture file to analyze: ")
-    output_csv = input("Enter CSV filename to save results [leave blank to skip]: ")
-    
-    output_csv = output_csv if output_csv.strip() else None
-    analyze_capture(capture_file, output_csv)
+    analyze_capture()
