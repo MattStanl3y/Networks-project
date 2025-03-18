@@ -11,15 +11,13 @@ def main():
         print("Created results directory")
     
     # Get user input
-    ip_filter, duration, capture_web = get_user_input()
+    interface, duration = get_user_input()
     
     # Capture traffic
     capture_file = capture_traffic(
         duration=duration,
         output_file="results/result.pcapng",
-        interface="en0",
-        ip_address=ip_filter,
-        capture_web=capture_web
+        interface=interface
     )
     
     print(f"Created capture file: {os.path.abspath(capture_file)}")

@@ -25,7 +25,14 @@ def analyze_capture(capture_file, output_csv):
     try:
         # Process each packet
         cap = pyshark.FileCapture(capture_file)
+        packet_count = 0
+        
         for packet in cap:
+            # Add a progress indicator for large files
+            packet_count += 1
+            if packet_count % 1000 == 0:
+                print(f"Processed {packet_count} packets...")
+            
             timestamps.append(packet.sniff_time)
             packet_lengths.append(int(packet.length))
             
