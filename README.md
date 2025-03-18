@@ -1,25 +1,40 @@
-# Project Setup
+# Project Cleanup Guidelines
 
-````gaming_network_analysis/
+## Files to Keep:
+
+- capture.py
+- process.py
+- visualize.py
+- main.py
+- results/ (directory)
+
+## Files to Remove:
+
+- test_import.py (no longer needed for testing imports)
+- config.py (not used in current implementation)
+- utils.py (not used in current implementation)
+- analyze.py (functionality integrated into other files)
+
+## Updated Project Structure:
+
+```
+gaming_network_analysis/
 ├── capture.py          # Script for capturing network traffic
 ├── process.py          # Script for processing captured data
 ├── visualize.py        # Script for creating visualizations
-├── analyze.py          # Script for analyzing the processed data
 ├── main.py             # Main script to tie everything together
-├── utils.py            # Utility functions used across scripts
-└── config.py           # Configuration parameters```
-````
+└── results/            # Directory for output files
+    ├── result.pcapng   # Network capture file
+    ├── result.csv      # Processed data file
+    └── result_analysis.png  # Visualization image
+```
 
-### commands
+## How to Run:
 
-'python3 main.py'
+```bash
+# Create the results directory (if it doesn't exist)
+mkdir -p results
 
-current issues(things i want to fix):
-
-- too much i/o, also just call every file result....., i still want to enter ip tho
-- tcp/http are not working rn 0.
-  - **problems may include**
-  1. Port filtering issue: The capture might not be including traffic on ports 80/443 (HTTP/HTTPS)
-  2. IP filtering too restrictive: If your gaming PC uses multiple IPs or the traffic routes differently than expected
-  3. TLS encryption: HTTPS traffic may be captured but identified as "TLS" rather than "HTTP"
-- too many comments, need it simple for rn this is just small version of overall project
+# Run the complete analysis pipeline
+python3 main.py
+```

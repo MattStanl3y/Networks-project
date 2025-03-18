@@ -2,9 +2,15 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
+import os
 
-def visualize_traffic(csv_file="result.csv"):
+def visualize_traffic(csv_file):
     try:
+        # Check if file exists
+        if not os.path.exists(csv_file):
+            print(f"Error: CSV file not found: {csv_file}")
+            return
+        
         # Load the CSV data
         df = pd.read_csv(csv_file)
         
@@ -49,19 +55,25 @@ def visualize_traffic(csv_file="result.csv"):
         plt.tight_layout()
         
         # Save the figure
-        output_file = "result_analysis.png"
+        output_file = "results/result_analysis.png"
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
         plt.savefig(output_file)
         print(f"Visualization saved to {output_file}")
         
         # Show the plot
         plt.show()
-            
+        
     except Exception as e:
         print(f"Error creating visualizations: {e}")
 
 if __name__ == "__main__":
+    # Create results directory if it doesn't exist
+    if not os.path.exists('results'):
+        os.makedirs('results')
+        print("Created results directory")
+    
     if len(sys.argv) > 1:
         csv_file = sys.argv[1]
         visualize_traffic(csv_file)
     else:
-        visualize_traffic()
+        visualize_traffic("results/result.csv")
