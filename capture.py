@@ -15,35 +15,29 @@ def list_interfaces():
     print(result.stdout)
 
 def capture_traffic(duration=120, output_file="results/result.pcapng", interface=None):
-    # Create results directory if it doesn't exist
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    my_ip = "172.20.3.231"
     
-    # Check if we're on Windows or macOS and use appropriate tshark path
-    if platform.system() == "Windows":
-        tshark_cmd = "tshark"
-    else:  # macOS or other
-        tshark_cmd = "/Applications/Wireshark.app/Contents/MacOS/tshark"
+    # Build the tshark command for Windows
+    cmd = ["C:\\Program Files\\Wireshark\\tshark.exe", "-w", output_file]
     
-    # Build the tshark command
-    cmd = [tshark_cmd, "-w", output_file]
-    
-    # Only specify interface if one was provided
+    # Add interface if specified
     if interface:
         cmd.extend(["-i", interface])
     
+    # Filter specifically for Call of Duty UDP traffic on port 3074
+    cod_filter = f"host {my_ip} and udp port 3074"
+    
+    # Add filter to command
+    cmd.extend(["-f", cod_filter])
+    
     # Start capture
     print(f"Starting capture for {duration} seconds...")
-    if interface:
-        print(f"Using interface: {interface}")
+    print(f"Using filter: {cod_filter}")
     
     process = subprocess.Popen(cmd)
-    try:
-        time.sleep(duration)
-    except KeyboardInterrupt:
-        print("\nCapture stopped early by user.")
-    finally:
-        process.terminate()
-        print(f"Capture complete. File saved to {output_file}")
+    time.sleep(duration)
+    process.terminate()
+    print(f"Capture complete. File saved to {output_file}")
     
     return output_file
 
