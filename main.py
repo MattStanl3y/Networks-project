@@ -11,13 +11,16 @@ def main():
         print("Created results directory")
     
     # Get user input
-    interface, duration = get_user_input()
+    interface, duration, my_ip, game_port, game_name = get_user_input()
     
     # Capture traffic
     capture_file = capture_traffic(
         duration=duration,
         output_file="results/result.pcapng",
-        interface=interface
+        interface=interface,
+        my_ip=my_ip,
+        game_port=game_port,
+        game_name=game_name
     )
     
     print(f"Created capture file: {os.path.abspath(capture_file)}")
