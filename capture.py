@@ -71,16 +71,20 @@ def get_user_input():
     duration_str = input("\nEnter capture duration in seconds [60]: ")
     duration = int(duration_str) if duration_str.strip() else 60
     
-    # Interface selection (optional)
+    # Interface selection (now required)
     print("\nAvailable network interfaces:")
     list_interfaces()
-    interface = input("\nSelect interface (leave blank for auto): ").strip()
+    interface = ""
+    while not interface:
+        interface = input("\nSelect interface (required): ").strip()
+        if not interface:
+            print("Interface selection is required. Please choose an interface.")
     
     # Final confirmation to start
     print(f"\nReady to capture {game_name} traffic on port {game_port}")
     print(f"IP Address: {my_ip}")
     print(f"Duration: {duration} seconds")
-    print(f"Interface: {'Auto' if not interface else interface}")
+    print(f"Interface: {interface}")
     
     start = input("\nType 'start' to begin capture: ").strip().lower()
     if start != "start":

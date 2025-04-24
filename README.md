@@ -25,7 +25,6 @@ gaming_network_analysis/
   - `pyshark`
   - `pandas`
   - `matplotlib`
-  - `seaborn`
 
 Install dependencies:
 
@@ -33,7 +32,7 @@ Install dependencies:
 pip install pyshark pandas matplotlib seaborn
 ```
 
-## ▶️ How to Run
+## ▶ How to Run
 
 ```bash
 python main.py
@@ -46,7 +45,7 @@ python main.py
 - Start and stop capture manually
 - View generated visualizations after capture ends
 
-## 🎮 Common Game UDP Ports
+## Common Game UDP Ports
 
 | Game         | UDP Port Range |
 | ------------ | -------------- |

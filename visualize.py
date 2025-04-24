@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 import sys
 import os
 
@@ -20,37 +19,44 @@ def visualize_traffic(csv_file):
         # Calculate time since start for each packet
         start_time = df['timestamp'].min()
         df['time_seconds'] = (df['timestamp'] - start_time).dt.total_seconds()
-        df['time_bucket'] = df['time_seconds'].apply(lambda x: int(x))
+        df['time_bucket'] = df['time_seconds'].apply(lambda x: round(x, 2))  # 0.02 second buckets
         
         # Create a figure with multiple subplots
         fig, axs = plt.subplots(2, 2, figsize=(12, 10))
         
-        # 1. Packet size distribution
+        # Packet size distribution
         axs[0, 0].hist(df['length'], bins=20, color='skyblue', edgecolor='black')
         axs[0, 0].set_title('Packet Size Distribution')
         axs[0, 0].set_xlabel('Packet Size (bytes)')
         axs[0, 0].set_ylabel('Number of Packets')
         
-        # 2. Protocol distribution
-        protocol_counts = df['protocol'].value_counts()
-        axs[0, 1].bar(protocol_counts.index, protocol_counts.values, color='lightgreen')
-        axs[0, 1].set_title('Protocol Distribution')
-        axs[0, 1].set_ylabel('Number of Packets')
-        axs[0, 1].tick_params(axis='x', rotation=45)
+        # Traffic Direction (Incoming vs Outgoing)
+        outgoing = df[df['src_ip'] == df['src_ip'].iloc[0]].shape[0]
+        incoming = df[df['dst_ip'] == df['src_ip'].iloc[0]].shape[0]
         
-        # 3. Traffic over time (packet count)
-        packets_per_second = df.groupby('time_bucket').size()
-        axs[1, 0].plot(packets_per_second.index, packets_per_second.values, 'b-')
+        axs[0, 1].bar(['Outgoing', 'Incoming'], [outgoing, incoming], color=['orange', 'green'])
+        axs[0, 1].set_title('Traffic Direction')
+        axs[0, 1].set_ylabel('Number of Packets')
+        
+       # Packets per second over time
+        packets_per_time = df.groupby('time_bucket').size()
+        axs[1, 0].plot(packets_per_time.index, packets_per_time.values, 'b-')
         axs[1, 0].set_title('Packets per Second')
         axs[1, 0].set_xlabel('Time (seconds)')
         axs[1, 0].set_ylabel('Packet Count')
         
-        # 4. Bandwidth over time
+        #x-axis should show the full duration
+        max_time = df['time_seconds'].max()
+        axs[1, 0].set_xlim(0, max_time)
+        
+        # Bandwidth over time
         bandwidth = df.groupby('time_bucket')['length'].sum() / 1024  # Convert to KB
         axs[1, 1].plot(bandwidth.index, bandwidth.values, 'r-')
         axs[1, 1].set_title('Bandwidth Usage')
         axs[1, 1].set_xlabel('Time (seconds)')
         axs[1, 1].set_ylabel('KB per Second')
+        
+        axs[1, 1].set_xlim(0, max_time)
         
         plt.tight_layout()
         
