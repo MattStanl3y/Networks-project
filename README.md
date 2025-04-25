@@ -57,6 +57,10 @@ python main.py
 
 > Search "[Game Name] UDP port" online to find specific ports.
 
+### Note:
+
+Windows Path: Ensure that Wireshark path is (C:\Program Files\Wireshark\tshark.exe). If not, change this in capture.py
+
 ## Warning
 
 Some anti-cheat systems may flag or close the game if packet capturing is detected.  

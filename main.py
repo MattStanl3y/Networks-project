@@ -1,5 +1,4 @@
 import os
-import sys
 from capture import capture_traffic, get_user_input
 from process import analyze_capture
 from visualize import visualize_traffic

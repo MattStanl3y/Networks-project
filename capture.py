@@ -5,7 +5,6 @@ import platform
 import socket
 
 def list_interfaces():
-    # Check if we're on Windows or macOS and use appropriate tshark path
     if platform.system() == "Windows":
         cmd = ["tshark", "-D"]
     else:  # macOS or other
@@ -78,13 +77,11 @@ def get_user_input():
     return interface, duration, my_ip, game_port, game_name
 
 def capture_traffic(duration=60, output_file="results/result.pcapng", interface=None, my_ip="127.0.0.1", game_port=3074, game_name="Unknown"):
-    # Update filter for selected game
+
     game_filter = f"host {my_ip} and udp port {game_port}"
     
-    # Build the tshark command for Windows
     cmd = ["C:\\Program Files\\Wireshark\\tshark.exe", "-w", output_file]
     
-    # Add interface if specified
     if interface:
         cmd.extend(["-i", interface])
     

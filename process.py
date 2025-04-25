@@ -13,7 +13,7 @@ def analyze_capture(capture_file, output_csv):
     
     print(f"Analyzing capture file: {capture_file}")
     
-    # Initialize empty lists to store packet info
+    #empty lists to store packet info
     timestamps = []
     protocols = []
     src_ips = []
@@ -75,7 +75,7 @@ def analyze_capture(capture_file, output_csv):
             'length': packet_lengths
         })
         
-        # Calculate basic statistics
+        # Calculate basic stats
         total_packets = len(df)
         total_bytes = df['length'].sum()
         duration = (df['timestamp'].max() - df['timestamp'].min()).total_seconds() if len(df) > 1 else 0

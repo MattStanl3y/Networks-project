@@ -7,12 +7,10 @@ from scipy.ndimage import gaussian_filter1d
 
 def visualize_traffic(csv_file):
     try:
-        # Check if file exists
         if not os.path.exists(csv_file):
             print(f"Error: CSV file not found: {csv_file}")
             return
         
-        # Load the CSV data
         df = pd.read_csv(csv_file)
         
         # Convert timestamp string to datetime
