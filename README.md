@@ -25,14 +25,13 @@ gaming_network_analysis/
   - `pyshark`
   - `pandas`
   - `matplotlib`
+  - `scipy`
 
-Install dependencies:
+## Install dependencies & run:
 
 ```bash
-pip install pyshark pandas matplotlib seaborn
+pip install pyshark pandas matplotlib scipy
 ```
-
-## ▶ How to Run
 
 ```bash
 python main.py
@@ -41,9 +40,10 @@ python main.py
 ### What to Expect
 
 - Confirm your IP address
-- Enter the game UDP port to monitor
-- Start and stop capture manually
-- View generated visualizations after capture ends
+- Select game (Call of Duty or custom)
+- Enter capture duration
+- Wait for capture to complete
+- View generated visualizations
 
 ## Common Game UDP Ports
 

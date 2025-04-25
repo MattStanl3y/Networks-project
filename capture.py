@@ -39,39 +39,23 @@ def get_user_input():
     else:
         my_ip = input("Could not detect IP automatically. Enter your IP address: ").strip()
     
-    # Game port selection
-    print("\nCommon game UDP ports:")
-    print("1. Call of Duty: 3074")
-    print("2. Fortnite: 9000")
-    print("3. Apex Legends: 37015")
-    print("4. Valorant: 7081")
-    print("5. Custom port")
+    print("\nSelect game:")
+    print("1. Call of Duty (UDP port 3074)")
+    print("2. Other (custom port)")
     
-    port_choice = input("\nSelect game (1-5): ").strip()
+    port_choice = input("\nSelect option (1-2): ").strip()
     if port_choice == "1":
         game_port = 3074
         game_name = "Call of Duty"
-    elif port_choice == "2":
-        game_port = 9000
-        game_name = "Fortnite"
-    elif port_choice == "3":
-        game_port = 37015
-        game_name = "Apex Legends"
-    elif port_choice == "4":
-        game_port = 7081
-        game_name = "Valorant"
-    elif port_choice == "5":
+    else:
         game_port = int(input("Enter custom UDP port number: "))
         game_name = "Custom"
-    else:
-        game_port = 3074  # Default to Call of Duty
-        game_name = "Call of Duty"
     
     # Capture duration
     duration_str = input("\nEnter capture duration in seconds [60]: ")
     duration = int(duration_str) if duration_str.strip() else 60
     
-    # Interface selection (now required)
+    # Interface selection
     print("\nAvailable network interfaces:")
     list_interfaces()
     interface = ""
