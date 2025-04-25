@@ -13,7 +13,6 @@ def visualize_traffic(csv_file):
         
         df = pd.read_csv(csv_file)
         
-        # Convert timestamp string to datetime
         df['timestamp'] = pd.to_datetime(df['timestamp'])
         
         # Calculate time since start for each packet
@@ -41,13 +40,12 @@ def visualize_traffic(csv_file):
         # Packets per second over time - SMOOTHED
         packets_per_time = df.groupby('time_bucket').size()
         
-        # Create a complete time range with all points
+        # time range with all points
         full_time_range = np.arange(0, df['time_seconds'].max() + 0.1, 0.1)
         
-        # Create a full series with all time points
+        # full series with all time points
         full_packets = pd.Series(index=full_time_range, data=0)
         
-        # Fill in the data we have
         for time_point, count in packets_per_time.items():
             if time_point in full_packets.index:
                 full_packets[time_point] = count
@@ -55,23 +53,22 @@ def visualize_traffic(csv_file):
         #  Gaussian for smoother curve
         smooth_packets = gaussian_filter1d(full_packets.values, sigma=2)
         
-        # Plot the smoothed data
+        # Plot data
         axs[1, 0].plot(full_packets.index, smooth_packets, 'b-', linewidth=2)
         axs[1, 0].set_title('Packets per Second (Smoothed)')
         axs[1, 0].set_xlabel('Time (seconds)')
         axs[1, 0].set_ylabel('Packet Count')
         
-        # Make sure the x-axis shows the full duration
+        # ensures x-axis shows full duration
         max_time = df['time_seconds'].max()
         axs[1, 0].set_xlim(0, max_time)
         
         # Bandwidth over time - SMOOTHED
         bandwidth = df.groupby('time_bucket')['length'].sum() / 1024  # Convert to KB
         
-        # Create a full series for bandwidth with all time points
+        # Full series for bandwidth with all time points
         full_bandwidth = pd.Series(index=full_time_range, data=0)
         
-        # Fill in the data we have
         for time_point, bw in bandwidth.items():
             if time_point in full_bandwidth.index:
                 full_bandwidth[time_point] = bw
@@ -79,31 +76,28 @@ def visualize_traffic(csv_file):
         # Gaussian for a smoother curve
         smooth_bandwidth = gaussian_filter1d(full_bandwidth.values, sigma=2)
         
-        # Plot the smoothed data
+        # Plot 
         axs[1, 1].plot(full_bandwidth.index, smooth_bandwidth, 'r-', linewidth=2)
         axs[1, 1].set_title('Bandwidth Usage (Smoothed)')
         axs[1, 1].set_xlabel('Time (seconds)')
         axs[1, 1].set_ylabel('KB per Second')
         
-        # Make sure the x-axis shows the full duration
+        # ensure x-axis shows  full duration
         axs[1, 1].set_xlim(0, max_time)
         
         plt.tight_layout()
         
-        # Save the figure
         output_file = "results/result_analysis.png"
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
         plt.savefig(output_file)
         print(f"Visualization saved to {output_file}")
         
-        # Show the plot
         plt.show()
         
     except Exception as e:
         print(f"Error creating visualizations: {e}")
 
 if __name__ == "__main__":
-    # Create results directory if it doesn't exist
     if not os.path.exists('results'):
         os.makedirs('results')
         print("Created results directory")

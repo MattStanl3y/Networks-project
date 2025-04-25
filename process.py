@@ -3,7 +3,6 @@ import pandas as pd
 import os
 
 def analyze_capture(capture_file, output_csv):
-    # Verify input paths
     if not os.path.exists(capture_file):
         print(f"Error: Capture file {capture_file} not found")
         return None
@@ -13,7 +12,6 @@ def analyze_capture(capture_file, output_csv):
     
     print(f"Analyzing capture file: {capture_file}")
     
-    #empty lists to store packet info
     timestamps = []
     protocols = []
     src_ips = []
@@ -28,7 +26,6 @@ def analyze_capture(capture_file, output_csv):
         packet_count = 0
         
         for packet in cap:
-            # Add a progress indicator for large files
             packet_count += 1
             if packet_count % 1000 == 0:
                 print(f"Processed {packet_count} packets...")
@@ -36,7 +33,6 @@ def analyze_capture(capture_file, output_csv):
             timestamps.append(packet.sniff_time)
             packet_lengths.append(int(packet.length))
             
-            # Get IP info if available
             if hasattr(packet, 'ip'):
                 src_ips.append(packet.ip.src)
                 dst_ips.append(packet.ip.dst)
@@ -63,8 +59,7 @@ def analyze_capture(capture_file, output_csv):
                 protocols.append(packet.highest_layer)
                 src_ports.append(None)
                 dst_ports.append(None)
-        
-        # Create DataFrame
+
         df = pd.DataFrame({
             'timestamp': timestamps,
             'protocol': protocols,
@@ -75,14 +70,14 @@ def analyze_capture(capture_file, output_csv):
             'length': packet_lengths
         })
         
-        # Calculate basic stats
+        # basic stats Calculation
         total_packets = len(df)
         total_bytes = df['length'].sum()
         duration = (df['timestamp'].max() - df['timestamp'].min()).total_seconds() if len(df) > 1 else 0
         avg_packet_size = df['length'].mean() if len(df) > 0 else 0
         protocol_counts = df['protocol'].value_counts()
         
-        # Print summary
+        # summary
         print(f"Capture Summary:")
         print(f"Total packets: {total_packets}")
         print(f"Total bytes: {total_bytes}")
@@ -92,7 +87,6 @@ def analyze_capture(capture_file, output_csv):
         for protocol, count in protocol_counts.items():
             print(f"  {protocol}: {count} packets ({count/total_packets*100:.1f}%)")
         
-        # Save to CSV
         df.to_csv(output_csv, index=False)
         print(f"Data saved to {output_csv}")
         
@@ -103,7 +97,6 @@ def analyze_capture(capture_file, output_csv):
         return None
 
 if __name__ == "__main__":
-    # Create results directory if it doesn't exist
     if not os.path.exists('results'):
         os.makedirs('results')
         print("Created results directory")

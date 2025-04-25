@@ -26,7 +26,6 @@ def get_my_ip():
         return None
 
 def get_user_input():
-    # Get and confirm IP address
     detected_ip = get_my_ip()
     if detected_ip:
         print(f"Detected your IP address as: {detected_ip}")
@@ -50,11 +49,9 @@ def get_user_input():
         game_port = int(input("Enter custom UDP port number: "))
         game_name = "Custom"
     
-    # Capture duration
     duration_str = input("\nEnter capture duration in seconds [60]: ")
     duration = int(duration_str) if duration_str.strip() else 60
     
-    # Interface selection
     print("\nAvailable network interfaces:")
     list_interfaces()
     interface = ""
@@ -63,7 +60,6 @@ def get_user_input():
         if not interface:
             print("Interface selection is required. Please choose an interface.")
     
-    # Final confirmation to start
     print(f"\nReady to capture {game_name} traffic on port {game_port}")
     print(f"IP Address: {my_ip}")
     print(f"Duration: {duration} seconds")
@@ -88,7 +84,6 @@ def capture_traffic(duration=60, output_file="results/result.pcapng", interface=
     # Add filter to command
     cmd.extend(["-f", game_filter])
     
-    # Start capture
     print(f"Starting capture for {game_name} on port {game_port}...")
     print(f"Capturing for {duration} seconds...")
     print(f"Using filter: {game_filter}")
@@ -101,10 +96,8 @@ def capture_traffic(duration=60, output_file="results/result.pcapng", interface=
     return output_file
 
 if __name__ == "__main__":
-    # Get user input
     interface, duration, my_ip, game_port, game_name = get_user_input()
     
-    # Capture traffic with standardized output filename
     capture_file = capture_traffic(
         duration=duration,
         output_file="results/result.pcapng",

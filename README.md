@@ -25,12 +25,13 @@ gaming_network_analysis/
   - `pyshark`
   - `pandas`
   - `matplotlib`
+  - `numpy`
   - `scipy`
 
 ## Install dependencies & run:
 
 ```bash
-pip install pyshark pandas matplotlib scipy
+pip install pyshark pandas matplotlib scipy numpy
 ```
 
 ```bash
@@ -40,10 +41,10 @@ python main.py
 ### What to Expect
 
 - Confirm your IP address
-- Select game (Call of Duty or custom)
+- Select/Enter game port
 - Enter capture duration
 - Wait for capture to complete
-- View generated visualizations
+- View generated visualizations & data
 
 ## Common Game UDP Ports
 
@@ -55,11 +56,12 @@ python main.py
 | Valorant     | 7000–8000      |
 | PUBG         | 7086–8100      |
 
-> Search "[Game Name] UDP port" online to find specific ports.
+> Search "[Game Name] UDP port" online to find specific ports, or visit https://portforward.com/ports/
 
-### Note:
+### Notes:
 
-Windows Path: Ensure that Wireshark path is (C:\Program Files\Wireshark\tshark.exe). If not, change this in capture.py
+- Windows Path: Ensure that Wireshark path is (C:\Program Files\Wireshark\tshark.exe). If not, change this in capture.py
+- Most games use multiple ports, all the packets genearted may not get captured/analyzed
 
 ## Warning
 
